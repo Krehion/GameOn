@@ -38,3 +38,5 @@ function launchModal() {
 function hideModal() {
   modalBg.style.display = "none"
 }
+
+// ajouter : vider formulaire à l'envoi
