@@ -85,6 +85,7 @@ function validCgu(cgu) {
  * Function : open confirmation when form is successfuly sent
  */
 function openThanks() {
+  // Hide the form and show the confirmation message
   form.style.display = "none";
   formThanks.style.display = "flex";
 }
@@ -132,4 +133,8 @@ form.addEventListener("submit", (event) => {
   validate();
 });
 
-// add : empty form when sent
+// Emptying the form when refreshing the page
+window.addEventListener("load", function () {
+  const form = document.getElementById("form");
+  form.reset();
+});
