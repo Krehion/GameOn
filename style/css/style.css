@@ -300,6 +300,16 @@ input[data-error]::after {
   cursor: pointer;
   border: 0;
 }
+
+#formThanks {
+  display: none;
+  text-align: center;
+  flex-direction: column;
+  height: 65vh;
+}
+#formThanks #thanksMessage {
+  margin: auto;
+}
 /* custom select styles */
 .custom-select {
   position: relative;
