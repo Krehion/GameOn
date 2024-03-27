@@ -27,12 +27,15 @@ function validEmail(email) {
 /**
  * Function : check that birthdate is given and plausible
  * @param {Date} birthdate
+ * @param {string} birthdateValue
  * @throws {Error}
  */
-function validBirthdate(birthdate) {
+function validBirthdate(birthdate, birthdateValue) {
   let dateTooOld = new Date("04/03/1907"); // birthdate of the current world's oldest person (dd-mm-YYYY)
-  if (birthdate === "") {
+  if (birthdateValue === "") {
     throw new Error("Veuillez entrer une date de naissance");
+  } else if (isNaN(birthdate.getTime())) {
+    throw new Error("Veuillez entrer une date de naissance valide");
   } else if (birthdate < dateTooOld.getTime()) {
     throw new Error("Veuillez entrer une date de naissance valide");
   }
@@ -55,12 +58,15 @@ function validQuantity(quantity) {
  * Function : check for a radio input
  */
 function validLocation(location) {
+  let checked = false; // Variable to keep track of whether any radio button is checked
   for (let i = 0; i < location.length; i++) {
-    if (!location[i].checked) {
+    if (location[i].checked) {
+      checked = true;
       break;
-    } else {
-      throw new Error("Veuillez sélectionner un tournoi");
     }
+  }
+  if (!checked) {
+    throw new Error("Veuillez sélectionner un tournoi");
   }
 }
 
@@ -75,14 +81,25 @@ function validCgu(cgu) {
   }
 }
 
+/**
+ * Function : open confirmation when form is successfuly sent
+ */
+function openThanks() {
+  form.style.display = "none";
+  formThanks.style.display = "flex";
+}
+
 // Validity check of the form
 function validate() {
+  // DOM elements
+  const form = document.getElementById("form");
+  const formThanks = document.getElementById("formThanks");
   // Retrieval of the form's data
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");
   const email = document.getElementById("email");
-  const birthdate = document.getElementById("birthdate");
-  const valueBirthdate = birthdate.getTime();
+  const birthdateValue = document.getElementById("birthdate").value;
+  const birthdate = new Date(birthdateValue); // Convert birthdate string to Date object
   const quantity = document.getElementById("quantity");
   const location = document.getElementsByName("location");
   const cgu = document.getElementById("checkbox1");
@@ -95,7 +112,7 @@ function validate() {
 
     validEmail(email.value);
 
-    validBirthdate(valueBirthdate);
+    validBirthdate(birthdate);
 
     validQuantity(quantity.value);
 
