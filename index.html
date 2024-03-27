@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="utf-8" />
@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css?family=DM+Sans" rel="stylesheet" />
   <script src="scripts/modal.js" defer></script>
   <script src="scripts/nav.js" defer></script>
+  <script src="scripts/form.js" defer></script>
 </head>
 
 <body>
@@ -55,14 +56,14 @@
       <div class="content">
         <span class="close"></span>
         <div class="modal-body">
-          <form name="reserve" action="index.html" method="get" onsubmit="return validate();">
+          <form name="reserve" id="form" action="index.html" method="get" novalidate=true onsubmit="return validate();"> <!-- novalidate : prevents browser from checking inputs -->
             <div class="formData">
-              <label for="first">Prénom</label><br>
-              <input class="text-control" type="text" id="first" name="first" minlength="2" /><br>
+              <label for="firstName">Prénom</label><br>
+              <input class="text-control" type="text" id="firstName" name="firstName" minlength="2" /><br>
             </div>
             <div class="formData">
-              <label for="last">Nom</label><br>
-              <input class="text-control" type="text" id="last" name="last" /><br>
+              <label for="lastName">Nom</label><br>
+              <input class="text-control" type="text" id="lastName" name="lastName" /><br>
             </div>
             <div class="formData">
               <label for="email">E-mail</label><br>
