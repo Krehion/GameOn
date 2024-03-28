@@ -78,18 +78,47 @@ function validEmail(emailValue, email) {
 
 /**
  * Function : check that birthdate is given and plausible
- * @param {Date} birthdate
+ * @param {Date} birthdateObject
  * @param {string} birthdateValue
  * @throws {Error}
  */
-function validBirthdate(birthdate, birthdateValue) {
+function validBirthdate(birthdateObject, birthdateValue, birthdate) {
   let dateTooOld = new Date("04/03/1907"); // birthdate of the current world's oldest person (dd-mm-YYYY)
+  let parentElement = birthdate.parentElement;
   if (birthdateValue === "") {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez entrer une date de naissance"
+      );
+    }
     throw new Error("Veuillez entrer une date de naissance");
-  } else if (isNaN(birthdate.getTime())) {
+  } else if (isNaN(birthdateObject.getTime())) {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez entrer une date de naissance valide"
+      );
+    }
     throw new Error("Veuillez entrer une date de naissance valide");
-  } else if (birthdate < dateTooOld.getTime()) {
+  } else if (birthdateObject < dateTooOld.getTime()) {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez entrer une date de naissance valide"
+      );
+    }
     throw new Error("Veuillez entrer une date de naissance valide");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
   }
 }
 
@@ -149,7 +178,7 @@ function invalidForm() {
   }
 
   invalidFormMessage.innerText =
-    "Merci de compléter correctement votre inscription.";
+    "Merci de compléter correctement votre inscription";
 }
 
 /**
@@ -173,8 +202,9 @@ function validate() {
   const lastNameValue = lastName.value;
   const email = document.getElementById("email");
   const emailValue = email.value;
-  const birthdateValue = document.getElementById("birthdate").value;
-  const birthdate = new Date(birthdateValue); // Convert birthdate string to Date object
+  const birthdate = document.getElementById("birthdate");
+  const birthdateValue = birthdate.value;
+  const birthdateObject = new Date(birthdateValue); // Convert birthdate string to Date object
   const quantity = document.getElementById("quantity");
   const location = document.getElementsByName("location");
   const cgu = document.getElementById("checkbox1");
@@ -202,7 +232,7 @@ function validate() {
   }
 
   try {
-    validBirthdate(birthdate);
+    validBirthdate(birthdateObject, birthdateValue, birthdate);
   } catch (error) {
     errors.push(error.message);
   }
