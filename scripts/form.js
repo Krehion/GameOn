@@ -5,22 +5,74 @@
  * @param {string} lastName.value
  * @throws {Error}
  */
-function validName(name) {
+function validFirst(name) {
+  let parentElement = firstName.parentElement;
   if (name.length < 2) {
-    throw new Error("Le nom est trop court"); // renvoie une erreur si le nom a une longueur < 2
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute("data-error", "Le prénom est trop court");
+    }
+    throw new Error("Le prénom est trop court");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
+  }
+}
+
+/**
+ * Function : check for valid name input
+ * condition : 2 characters length minimum
+ * @param {string} firstName.value
+ * @param {string} lastName.value
+ * @throws {Error}
+ */
+function validLast(name) {
+  let parentElement = lastName.parentElement;
+  if (name.length < 2) {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute("data-error", "Le nom est trop court");
+    }
+    throw new Error("Le nom est trop court");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
   }
 }
 
 /**
  * Function : check for valid e-mail format
  * condition : passes the defined RegExp test
- * @param {string} email.value
+ * @param {string} emailValue
  * @throws {Error}
  */
-function validEmail(email) {
+function validEmail(emailValue, email) {
   let regExEmail = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+");
-  if (!regExEmail.test(email)) {
+  let parentElement = email.parentElement;
+  if (!regExEmail.test(emailValue) || emailValue === "") {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez renseigner un e-mail valide"
+      );
+    }
     throw new Error("Veuillez renseigner un e-mail valide");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
   }
 }
 
@@ -82,6 +134,25 @@ function validCgu(cgu) {
 }
 
 /**
+ * Function : displays error message when form is submitted but incorrect
+ */
+function invalidForm() {
+  let invalidFormMessage = document.getElementById("invalidFormMessage"); // check that element does not already exist
+
+  if (!invalidFormMessage) {
+    // if it doesn't exist, create it
+    const form = document.getElementById("form");
+    invalidFormMessage = document.createElement("p");
+    invalidFormMessage.id = "invalidFormMessage";
+
+    form.append(invalidFormMessage);
+  }
+
+  invalidFormMessage.innerText =
+    "Merci de compléter correctement votre inscription.";
+}
+
+/**
  * Function : open confirmation when form is successfuly sent
  */
 function openThanks() {
@@ -97,33 +168,71 @@ function validate() {
   const formThanks = document.getElementById("formThanks");
   // Retrieval of the form's data
   const firstName = document.getElementById("firstName");
+  const firstNameValue = firstName.value;
   const lastName = document.getElementById("lastName");
+  const lastNameValue = lastName.value;
   const email = document.getElementById("email");
+  const emailValue = email.value;
   const birthdateValue = document.getElementById("birthdate").value;
   const birthdate = new Date(birthdateValue); // Convert birthdate string to Date object
   const quantity = document.getElementById("quantity");
   const location = document.getElementsByName("location");
   const cgu = document.getElementById("checkbox1");
 
-  // Check that all the data is valid
+  // Array to store errors
+  const errors = [];
+
+  // Perform all validations
   try {
-    validName(firstName.value);
-
-    validName(lastName.value);
-
-    validEmail(email.value);
-
-    validBirthdate(birthdate);
-
-    validQuantity(quantity.value);
-
-    validLocation(location);
-
-    validCgu(cgu);
-
-    openThanks();
+    validFirst(firstNameValue, firstName);
   } catch (error) {
-    alert("Merci de compléter correctement votre inscription");
+    errors.push(error.message);
+  }
+
+  try {
+    validLast(lastNameValue, lastName);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  try {
+    validEmail(emailValue, email);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  try {
+    validBirthdate(birthdate);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  try {
+    validQuantity(quantity.value);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  try {
+    validLocation(location);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  try {
+    validCgu(cgu);
+  } catch (error) {
+    errors.push(error.message);
+  }
+
+  // Handle errors
+  if (errors.length > 0) {
+    // Handle all errors collectively
+    console.error(errors);
+    invalidForm();
+  } else {
+    // If no errors, proceed with form submission
+    openThanks();
   }
 }
 
