@@ -159,13 +159,27 @@ function validQuantity(quantityValue, quantity) {
  */
 function validLocation(location) {
   let checked = false; // Variable to keep track of whether any radio button is checked
+  let parentElement = location1.parentElement;
   for (let i = 0; i < location.length; i++) {
     if (location[i].checked) {
       checked = true;
+      if (
+        parentElement &&
+        parentElement.getAttribute("data-error-visible") === "true"
+      ) {
+        parentElement.removeAttribute("data-error-visible");
+      }
       break;
     }
   }
   if (!checked) {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez sélectionner un tournoi"
+      );
+    }
     throw new Error("Veuillez sélectionner un tournoi");
   }
 }
@@ -174,10 +188,23 @@ function validLocation(location) {
  * Function : verify mandatory checkbox is checked
  */
 function validCgu(cgu) {
+  let parentElement = cgu.parentElement;
   if (!cgu.checked) {
-    throw new Error(
-      "Vous devez accepter les Conditions Générales d'Utilisation"
-    );
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Vous devez accepter les Conditions d'Utilisation"
+      );
+    }
+    throw new Error("Vous devez accepter les Conditions d'Utilisation");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
   }
 }
 
