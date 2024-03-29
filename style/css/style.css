@@ -161,6 +161,7 @@ label {
   font-weight: normal;
   display: inline-block;
   margin-bottom: 11px;
+  padding-top: 0.5vw;
 }
 input {
   padding: 8px;
@@ -206,6 +207,7 @@ input[data-error]::after {
   margin-left: 36px;
   font-size: 12px;
   font-weight: normal;
+  padding: 0;
 }
 .checkbox-label .checkbox-icon,
 .checkbox2-label .checkbox-icon {
@@ -387,6 +389,8 @@ input[data-error]::after {
 .text-label {
   font-weight: normal;
   font-size: 16px;
+  padding-left: 0;
+  padding-right: 0;
 }
 .hero-section {
   border-radius: 10px;
