@@ -204,7 +204,8 @@ input[data-error]::after {
 .checkbox-label,
 .checkbox2-label {
   position: relative;
-  margin-left: 36px;
+  margin-left: 30px;
+  margin-right: 6px;
   font-size: 12px;
   font-weight: normal;
   padding: 0;
