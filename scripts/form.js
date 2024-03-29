@@ -127,11 +127,30 @@ function validBirthdate(birthdateObject, birthdateValue, birthdate) {
  * @param {number} quantity
  * @throws {Error}
  */
-function validQuantity(quantity) {
-  if (quantity === "") {
+function validQuantity(quantityValue, quantity) {
+  let parentElement = quantity.parentElement;
+  if (quantityValue === "") {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute("data-error", "Veuillez indiquer un chiffre");
+    }
     throw new Error("Veuillez indiquer un chiffre");
-  } else if (quantity < 0 || quantity > 99) {
+  } else if (quantityValue < 0 || quantityValue > 99) {
+    if (parentElement) {
+      parentElement.setAttribute("data-error-visible", "true");
+      parentElement.setAttribute(
+        "data-error",
+        "Veuillez indiquer un chiffre valide"
+      );
+    }
     throw new Error("Veuillez indiquer un chiffre valide");
+  } else {
+    if (
+      parentElement &&
+      parentElement.getAttribute("data-error-visible") === "true"
+    ) {
+      parentElement.removeAttribute("data-error-visible");
+    }
   }
 }
 
@@ -206,6 +225,7 @@ function validate() {
   const birthdateValue = birthdate.value;
   const birthdateObject = new Date(birthdateValue); // Convert birthdate string to Date object
   const quantity = document.getElementById("quantity");
+  const quantityValue = quantity.value;
   const location = document.getElementsByName("location");
   const cgu = document.getElementById("checkbox1");
 
@@ -238,7 +258,7 @@ function validate() {
   }
 
   try {
-    validQuantity(quantity.value);
+    validQuantity(quantityValue, quantity);
   } catch (error) {
     errors.push(error.message);
   }
