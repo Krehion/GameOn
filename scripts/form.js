@@ -1,25 +1,37 @@
 /**
+ * Function : display error style
+ */
+function addError(parentElement, errorMessage) {
+  parentElement.setAttribute("data-error-visible", "true");
+  parentElement.setAttribute("data-error", errorMessage);
+  throw new Error(errorMessage);
+}
+
+/**
+ * Function : remove error style if there is one
+ */
+function removeError(parentElement) {
+  if (
+    parentElement &&
+    parentElement.getAttribute("data-error-visible") === "true"
+  ) {
+    parentElement.removeAttribute("data-error-visible");
+  }
+}
+
+/**
  * Function : check for valid name input
  * condition : 2 characters length minimum
- * @param {string} firstName.value
- * @param {string} lastName.value
+ * @param {string} firstNameValue
  * @throws {Error}
  */
-function validFirst(name) {
+function validFirst(firstNameValue) {
   let parentElement = firstName.parentElement;
-  if (name.length < 2) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute("data-error", "Le prénom est trop court");
-    }
-    throw new Error("Le prénom est trop court");
+  let errorMessage = "Le prénom est trop court";
+  if (firstNameValue.length < 2) {
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
@@ -30,21 +42,13 @@ function validFirst(name) {
  * @param {string} lastName.value
  * @throws {Error}
  */
-function validLast(name) {
+function validLast(lastNameValue) {
   let parentElement = lastName.parentElement;
-  if (name.length < 2) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute("data-error", "Le nom est trop court");
-    }
-    throw new Error("Le nom est trop court");
+  let errorMessage = "Le nom est trop court";
+  if (lastNameValue.length < 2) {
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
@@ -57,22 +61,11 @@ function validLast(name) {
 function validEmail(emailValue, email) {
   let regExEmail = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+");
   let parentElement = email.parentElement;
+  let errorMessage = "Veuillez renseigner un e-mail valide";
   if (!regExEmail.test(emailValue) || emailValue === "") {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez renseigner un e-mail valide"
-      );
-    }
-    throw new Error("Veuillez renseigner un e-mail valide");
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
@@ -84,41 +77,22 @@ function validEmail(emailValue, email) {
  */
 function validBirthdate(birthdateObject, birthdateValue, birthdate) {
   let dateTooOld = new Date("04/03/1907"); // birthdate of the current world's oldest person (dd-mm-YYYY)
+  let dateTooYoung = new Date("01/01/2015"); // person would be < 10YO in 2024
   let parentElement = birthdate.parentElement;
   if (birthdateValue === "") {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez entrer une date de naissance"
-      );
-    }
-    throw new Error("Veuillez entrer une date de naissance");
-  } else if (isNaN(birthdateObject.getTime())) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez entrer une date de naissance valide"
-      );
-    }
-    throw new Error("Veuillez entrer une date de naissance valide");
-  } else if (birthdateObject < dateTooOld.getTime()) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez entrer une date de naissance valide"
-      );
-    }
-    throw new Error("Veuillez entrer une date de naissance valide");
+    let errorMessage = "Veuillez entrer une date de naissance";
+    addError(parentElement, errorMessage);
+  } else if (
+    isNaN(birthdateObject.getTime()) ||
+    birthdateObject < dateTooOld.getTime()
+  ) {
+    let errorMessage = "Veuillez entrer une date de naissance valide";
+    addError(parentElement, errorMessage);
+  } else if (birthdateObject > dateTooYoung) {
+    let errorMessage = "Vous devez avoir au moins 10 ans pour participer";
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
@@ -130,27 +104,13 @@ function validBirthdate(birthdateObject, birthdateValue, birthdate) {
 function validQuantity(quantityValue, quantity) {
   let parentElement = quantity.parentElement;
   if (quantityValue === "") {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute("data-error", "Veuillez indiquer un chiffre");
-    }
-    throw new Error("Veuillez indiquer un chiffre");
+    let errorMessage = "Veuillez indiquer un chiffre";
+    addError(parentElement, errorMessage);
   } else if (quantityValue < 0 || quantityValue > 99) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez indiquer un chiffre valide"
-      );
-    }
-    throw new Error("Veuillez indiquer un chiffre valide");
+    let errorMessage = "Veuillez indiquer un chiffre valide";
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
@@ -160,27 +120,16 @@ function validQuantity(quantityValue, quantity) {
 function validLocation(location) {
   let checked = false; // Variable to keep track of whether any radio button is checked
   let parentElement = location1.parentElement;
+  let errorMessage = "Veuillez sélectionner un tournoi";
   for (let i = 0; i < location.length; i++) {
     if (location[i].checked) {
       checked = true;
-      if (
-        parentElement &&
-        parentElement.getAttribute("data-error-visible") === "true"
-      ) {
-        parentElement.removeAttribute("data-error-visible");
-      }
+      removeError(parentElement);
       break;
     }
   }
   if (!checked) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Veuillez sélectionner un tournoi"
-      );
-    }
-    throw new Error("Veuillez sélectionner un tournoi");
+    addError(parentElement, errorMessage);
   }
 }
 
@@ -189,22 +138,11 @@ function validLocation(location) {
  */
 function validCgu(cgu) {
   let parentElement = cgu.parentElement;
+  let errorMessage = "Vous devez accepter les Conditions d'Utilisation";
   if (!cgu.checked) {
-    if (parentElement) {
-      parentElement.setAttribute("data-error-visible", "true");
-      parentElement.setAttribute(
-        "data-error",
-        "Vous devez accepter les Conditions d'Utilisation"
-      );
-    }
-    throw new Error("Vous devez accepter les Conditions d'Utilisation");
+    addError(parentElement, errorMessage);
   } else {
-    if (
-      parentElement &&
-      parentElement.getAttribute("data-error-visible") === "true"
-    ) {
-      parentElement.removeAttribute("data-error-visible");
-    }
+    removeError(parentElement);
   }
 }
 
