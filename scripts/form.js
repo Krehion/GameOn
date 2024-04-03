@@ -23,28 +23,13 @@ function removeError(parentElement) {
  * Function : check for valid name input
  * condition : 2 characters length minimum
  * @param {string} firstNameValue
- * @throws {Error}
- */
-function validFirst(firstNameValue, firstName) {
-  let parentElement = firstName.parentElement;
-  let errorMessage = "Le prénom est trop court";
-  if (firstNameValue.length < 2) {
-    addError(parentElement, errorMessage);
-  } else {
-    removeError(parentElement);
-  }
-}
-
-/**
- * Function : check for valid name input
- * condition : 2 characters length minimum
  * @param {string} lastNameValue
+ * @param {string} errorMessage
  * @throws {Error}
  */
-function validLast(lastNameValue, lastName) {
-  let parentElement = lastName.parentElement;
-  let errorMessage = "Le nom est trop court";
-  if (lastNameValue.length < 2) {
+function validName(nameValue, nameElement, errorMessage) {
+  let parentElement = nameElement.parentElement;
+  if (nameValue.length < 2) {
     addError(parentElement, errorMessage);
   } else {
     removeError(parentElement);
@@ -198,13 +183,13 @@ function validate() {
 
   // Perform all validations & stack errors in array
   try {
-    validFirst(firstNameValue, firstName);
+    validName(firstNameValue, firstName, "Le prénom est trop court");
   } catch (error) {
     errors.push(error.message);
   }
 
   try {
-    validLast(lastNameValue, lastName);
+    validName(lastNameValue, lastName, "Le nom est trop court");
   } catch (error) {
     errors.push(error.message);
   }
@@ -242,7 +227,6 @@ function validate() {
   // Handle errors
   if (errors.length > 0) {
     // Handle all errors collectively
-    console.error(errors);
     invalidForm();
   } else {
     // If no errors, proceed with form submission
