@@ -517,7 +517,7 @@ footer {
     min-width: 100px;
   }
   .hero-img {
-    width: calc(100%-40px);
+    width: calc(100% - 40px);
     max-height: 560px;
     aspect-ratio: 1.2/1;
     border-radius: 10px;
