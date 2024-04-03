@@ -237,7 +237,7 @@ function validate() {
 // Sending the form
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  validate();
+  validate;
 });
 
 // Emptying the form when refreshing the page
