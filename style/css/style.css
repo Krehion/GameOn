@@ -468,6 +468,12 @@ footer {
 
 /* MEDIA QUERIES */
 
+@media screen and (max-width: 1000px) {
+  .hero-headline {
+    font-size: 4.5rem;
+  }
+}
+
 @media screen and (max-width: 800px) {
   .topnav a {
     display: none;
